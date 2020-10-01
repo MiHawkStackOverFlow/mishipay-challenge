@@ -1,0 +1,23 @@
+<div class="error-message" *ngIf="errorMessage">
+  {{ errorMessage }}
+</div>
+
+<div id="interactive" class="viewport">
+  <!-- QuaggaJS will populate this element -->
+</div>
+
+<div class="shopping-cart">
+  <span *ngIf="shoppingCart.isEmpty else shoppingCartItems">Shopping cart is empty</span>
+  <ng-template #shoppingCartItems>
+
+    <app-shopping-cart-item
+      *ngFor="let articleAndCount of shoppingCart.items.entries();"
+      [article]="articleAndCount[0]"
+      [count]="articleAndCount[1]">
+    </app-shopping-cart-item>
+
+    <div class="shopping-cart-total">
+      Total: {{ shoppingCart.totalPrice }} USD
+    </div>
+  </ng-template>
+</div>
