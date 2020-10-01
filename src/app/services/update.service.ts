@@ -5,7 +5,6 @@ import { SwUpdate } from '@angular/service-worker';
   providedIn: 'root'
 })
 export class UpdateService {
-
   constructor(private swUpdate: SwUpdate) {
     swUpdate.available.subscribe(event => {
       if (window.confirm(`A new update is available. Would you like to load the latest version?`)) {

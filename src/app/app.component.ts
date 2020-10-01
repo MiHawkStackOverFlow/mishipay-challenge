@@ -11,7 +11,7 @@ import { UpdateService } from './services/update.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements AfterViewInit {
-
+  title: string = 'mishipay-challenge';
   errorMessage: string;
 
   shoppingCart: ShoppingCart;
@@ -37,32 +37,34 @@ export class AppComponent implements AfterViewInit {
       return;
     }
 
-    Quagga.init({
-        inputStream: {
-          constraints: {
-            facingMode: 'environment'
+    if(document.getElementById('interactive')) {
+      Quagga.init({
+          inputStream: {
+            constraints: {
+              facingMode: 'environment'
+            },
+            area: { // defines rectangle of the detection/localization area
+              top: '40%',    // top offset
+              right: '0%',  // right offset
+              left: '0%',   // left offset
+              bottom: '40%'  // bottom offset
+            },
           },
-          area: { // defines rectangle of the detection/localization area
-            top: '40%',    // top offset
-            right: '0%',  // right offset
-            left: '0%',   // left offset
-            bottom: '40%'  // bottom offset
+          decoder: {
+            readers: ['ean_reader']
           },
         },
-        decoder: {
-          readers: ['ean_reader']
-        },
-      },
-      (err) => {
-        if (err) {
-          this.errorMessage = `QuaggaJS could not be initialized, err: ${err}`;
-        } else {
-          Quagga.start();
-          Quagga.onDetected((res) => {
-            this.onBarcodeScanned(res.codeResult.code);
-          });
-        }
-      });
+        (err) => {
+          if (err) {
+            this.errorMessage = `QuaggaJS could not be initialized, err: ${err}`;
+          } else {
+            Quagga.start();
+            Quagga.onDetected((res) => {
+              this.onBarcodeScanned(res.codeResult.code);
+            });
+          }
+        });
+    }
 
     setTimeout(() => {
       this.updateService.checkForUpdates();
